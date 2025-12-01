@@ -1,5 +1,5 @@
 const jwt=require('jsonwebtoken')
-const User=require('../middleware/authMiddleware')
+const User=require('../models/userModel')
 
 //create a function named protect so that we can use it anywhere
 const protect=async (req,res,next)=>{
@@ -17,17 +17,21 @@ const protect=async (req,res,next)=>{
 
            const decoded=jwt.verify(token, process.env.JWT_SECRET) //verify the token and enter the password from env
            req.user=await User.findById(decoded.id).select('-password')//find the user by decoded id
+           return next()
         }
+       
     }
     catch(err){
         console.error(err)
         return res.status(401).json({message:"Invalid Token"})
     }
-}
 
 //check if token is available
 if(!token){
     return res.status(401).json({message:"No token"})
 }
+}
+
+
 
 module.exports=protect
