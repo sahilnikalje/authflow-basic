@@ -7,7 +7,7 @@ const router=express.Router()
 
 //public routes
 router.post('/register', registerUser)
-router.post('/login', auth.loginUser)
+router.post('/login', loginUser)
 
 //private routes
 router.get('/profile', protect,getProfile) // this was the main error
