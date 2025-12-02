@@ -12,6 +12,11 @@ app.use(express.json()) //parse incoming JSON request bodies
 app.use(cors()) //it allows frontend to access backend
 
 app.use('/api/auth', authRoutes)
+ 
+//this was causing problem in deployment
+app.get('/', (req, res) => {
+  res.send('Authflow-basic backend is running 🚀');
+});
 
 const PORT=process.env.PORT
 
