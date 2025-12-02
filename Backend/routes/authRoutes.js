@@ -10,6 +10,7 @@ router.post('/register', auth.registerUser)
 router.post('/login', auth.loginUser)
 
 //private routes
-router.get('/profile', auth.getProfile)
+router.get('/profile', protect,auth.getProfile) // this was the main error
+//protect should also be used here to access the profile 
 
 module.exports=router

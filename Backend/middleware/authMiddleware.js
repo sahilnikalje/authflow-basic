@@ -16,10 +16,18 @@ const protect=async (req,res,next)=>{
            // so split it with (' ')and then select the 1th index 
 
            const decoded=jwt.verify(token, process.env.JWT_SECRET) //verify the token and enter the password from env
-           req.user=await User.findById(decoded.id).select('-password')//find the user by decoded id
+           const user= req.user=await User.findById(decoded.id).select('-password')//find the user by decoded id
+
+         //this is added after findin error
+           if(!user){
+             //this shows token valid but user doesnt exist in db
+             return res.status(401).json({message:"User not found"})
+           }
+           req.user=user //attach found user
            return next()
         }
-       
+        //no token provided
+       return res.status(401).json({message:'No token'})
     }
     catch(err){
         console.error(err)
@@ -27,9 +35,7 @@ const protect=async (req,res,next)=>{
     }
 
 //check if token is available
-if(!token){
-    return res.status(401).json({message:"No token"})
-}
+
 }
 
 

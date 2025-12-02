@@ -85,14 +85,19 @@ const loginUser=async (req,res)=>{
 //get profile
 const getProfile=async (req,res)=>{
     try{
+         //this is added after the error
+           if (!req.user) {
+             return res.status(401).json({ message: 'Not authenticated' });
+          }
+
        //auth middleware will attach user to req.user
-       const user=await User.findById(req.user.id).select('-password')
+       const user=await User.findById(req.user._id).select('-password')
        if(!user){
         return res.status(404).json({message:"User not found"})
        }
 
        //show user 
-       res.json(user)
+      return res.json(user)
     }
     catch(err){
         console.error(err)
